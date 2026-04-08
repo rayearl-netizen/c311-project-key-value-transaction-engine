@@ -1,3 +1,4 @@
+/*
 fn lexical_analyzer(content:String){
     enum Token{
         SET,
@@ -13,3 +14,4 @@ fn lexical_analyzer(content:String){
     print(a);
 }
 
+*/

@@ -1,6 +1,11 @@
+mod LexicalAnalyzer;
+
+
+
 //In rust the args[] stream is instead accessed via a standard library.
 use std::env;
 use std::fs;
+
 
 fn main() {
     //Here we access these terminal arguements and store them in a dynamic array -- Vec or vector.
@@ -9,29 +14,15 @@ fn main() {
     //A Rust macro that prints arg with special formatting to support the Vec<String>.
     dbg!(&args);
 
-    //Creating Strings containing all contents of 2 files.
-    let contents2 = fs::read_to_string(&args[2])
-        .expect("Was not able to find file #2.");
-    println!("Text within file number two:\n {contents2}");    
-    let contents1 = fs::read_to_string(&args[1])
-        .expect("Was not able to find file #1.");
-    println!("Text within file number one:\n {contents1}");
+    let contents1 = fs::read_to_string(&args[1]).expect("Not able to find file"); //Large String for Processing File 1.
+    println!("Text within file number one: \n{contents1}");
+    let contents2 = fs::read_to_string(&args[2]).expect("Not able to find file"); //Large String for Processing File 2.
+    println!("Text within file number one: \n{contents2}");
 
-    lexical_analyzer("SET".to_string());
-}
+    let tokenized = LexicalAnalyzer::lexical_analyzer(contents1);
 
-fn lexical_analyzer(content:String){
-    #[derive(Debug)]
-    enum Token{
-        SET,
-        GET,
-        DELETE,
-        IDENTIFIER(String),
-        VALUE(String),
-        NEWLINE,
-        EOF,
+    for i in 0..tokenized.len() {
+        println!("{:?}", tokenized[i]);
     }
-    let iden = Token::IDENTIFIER(content);
-    println!("{:?}",iden);
 }
 

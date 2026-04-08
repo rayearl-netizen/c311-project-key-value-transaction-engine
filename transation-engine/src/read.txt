@@ -1,6 +1,0 @@
-#Sample Text to Test Scripting.
-BEGIN
-... 
-...
-#Hi.
-END
