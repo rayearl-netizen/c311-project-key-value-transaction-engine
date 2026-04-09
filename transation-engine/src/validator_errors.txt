@@ -1,0 +1,51 @@
+#Validator Errors~#
+#>>>>>>>>>>>>>>>>>>>>>~#
+
+#Error: Statement before BEGIN.~#
+#
+SET x "Hi"
+BEGIN;
+GET x;
+END;
+~#
+
+#Error: Statement after END.~#
+#
+BEGIN;
+SET x "After End";
+END;
+GET x;
+~#
+
+
+#Error Missing BEGIN~#
+#
+SET x "Where's the Begin?"
+Get x;
+END;
+~#
+
+#Missing END~#
+#
+BEGIN;
+SET x "Where's the END?"
+Get x;
+~#
+
+#Error: GET/DEL Statement containing nonexistent key~#
+#
+BEGIN;
+SET x "key?"
+GET y;
+END;
+~#
+
+#Error: GET Statement containing deleted key~#
+#
+BEGIN;
+SET x "Deleted"
+GET x;
+DEL x;
+GET x;
+END;
+~#

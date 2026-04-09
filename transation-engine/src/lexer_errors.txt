@@ -1,0 +1,40 @@
+#LEXING ERRORS~#
+
+#Error: Identifier starting with numeric.~#
+#
+BEGIN;
+SET 1stError "This is Invalid!";
+END;
+~#
+
+#Error: Identifier with non-alphanumerical character~#
+#
+BEGIN;
+SET Error! "The '!' is invalid";
+GET Error1;
+END;
+~#
+
+#Error: NON-Capitalized Keyword!~#
+#
+BEGIN;
+SET capital "All keywords must be Capitalized!";
+Get capital;
+END;
+~#
+
+#Error: Non-terminating Quotes~#
+#
+BEGIN;
+SET quotes "Non-terminating Quote;
+GET quotes;
+END;
+~#
+
+#Error: Quote within a Quote. Design Choice.~#
+#
+BEGIN;
+SET doublenono "No "double" quotes!";
+GET doublenono;
+END;
+~#

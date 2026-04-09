@@ -1,0 +1,11 @@
+
+BEGIN;
+SET x "Original String";
+GET x;
+COMMIT;
+DEL x;
+SET x "New String";
+GET x;
+ABORT;
+GET x;
+END;

@@ -1,0 +1,8 @@
+
+#HI My name is BILLY! ~#
+BEGIN;
+SET x "Hi MOM!";
+#Hello Again ~#
+GET x;
+END;
+#End of File commenting! ~#

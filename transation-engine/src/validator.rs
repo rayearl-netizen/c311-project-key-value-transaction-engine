@@ -22,8 +22,8 @@ pub fn validator(command_stream: &Vec<Command>) -> Result<(), String>{
         let mut command = &command_stream[i];
         match &command_stream[i]{
             Command::SET(key,_) => validate_set(key.to_string() ,&mut state)?,
-            Command::GET(_) => validate_identifier_ref(command, &mut state)?,
-            Command::DEL(_) => validate_identifier_ref(command,&mut state )?,
+            Command::GET(_) => validate_get(command, &mut state)?,
+            Command::DEL(_) => validate_del(command,&mut state )?,
             Command::BEGIN => validate_begin(&mut state)?,
             Command::END => validate_end(&mut state)?,
             Command::COMMIT => validate_basics(&mut state)?,
@@ -35,18 +35,35 @@ pub fn validator(command_stream: &Vec<Command>) -> Result<(), String>{
     Ok(())
 }
 //GET and DEL commands
-fn validate_identifier_ref(command: &Command,  state:&mut ValidatorState) -> Result<(), String>{
+fn validate_get(command: &Command,  state:&mut ValidatorState) -> Result<(), String>{
     let key = match command {
         Command::GET(identifier) => identifier,
-        Command::DEL(identifier) => identifier,
         _ => return Err("Expected Command with Identifier Reference".to_string()),
     };
     if state.active_transaction != true {
-        return Err("GET/DEL must be within BEGIN-END block".to_string());
+        return Err("GET must be within BEGIN-END block".to_string());
     }
     if !state.identifiers.contains(key){
         return  Err("Key not found!".to_string());
     }
+    Ok(())
+}
+
+fn validate_del(command: &Command,  state:&mut ValidatorState) -> Result<(), String>{
+    if state.active_transaction != true {
+        return Err("DEL must be within BEGIN-END block".to_string());
+    }
+
+    let key = match command {
+        Command::DEL(identifier) => identifier,
+        _ => return Err("Expected Command with Identifier Reference".to_string()),
+    };
+
+    if !state.identifiers.contains(key){
+        return  Err("Key not found!".to_string());
+    }
+    state.identifiers.remove(key);
+
     Ok(())
 }
 
