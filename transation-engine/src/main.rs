@@ -6,6 +6,7 @@ pub mod exec;
 //In rust the args[] stream is instead accessed via a standard library.
 use std::env;
 use std::fs;
+use std::collections::HashMap;
 
 
 fn main() {
@@ -15,6 +16,8 @@ fn main() {
     //A Rust macro that prints arg with special formatting to support the Vec<String>.
     dbg!(&args);
 
+    let mut key_value_space: HashMap<String,String> = HashMap::new();
+    
     let contents1 = fs::read_to_string(&args[1]).expect("Not able to find file"); //Large String for Processing File 1.
     println!("Text within file number one: \n{contents1}");
     let contents2 = fs::read_to_string(&args[2]).expect("Not able to find file"); //Large String for Processing File 2.
@@ -33,7 +36,11 @@ fn main() {
         println!("{:?}", parsed[i]);
     }
 
-    validator::validator(parsed);
+    validator::validator(&parsed);
     println!("Validation Complete!");
+    
+    exec::execute_commands(parsed, key_value_space);
+    
+        
 }
 

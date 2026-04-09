@@ -9,7 +9,7 @@ struct ValidatorState{
 }
 
 //"Silent Bounce Approach", either the validator announces an error or we proceed.
-pub fn validator(command_stream: Vec<Command>) -> Result<(), String>{
+pub fn validator(command_stream: &Vec<Command>) -> Result<(), String>{
     let mut i = 0;
     let mut state:ValidatorState = ValidatorState{
         identifiers: HashSet::new(),
