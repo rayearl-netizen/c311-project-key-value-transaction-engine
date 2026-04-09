@@ -1,12 +1,17 @@
 # c311-project-key-value-tranaction-engine
 
-#How To Run
+How To Run
+
 Within the c311-project-key-value-transaction-engine/transaction-engine/src/ folder contain main.rs and its modules and sample text files.
+
 In a terminal type cargo run [files seperated by a space including the extension]
+
 Recomended Example:
+
 cargo run simplefile.txt simplefile2.txt
 
 Each file is discrete in its operations.
+
 As each file is processed sequentially, each will output the results of lexing, parsing, validating, and executing the contents of each file.
 
 Syntax:
@@ -31,14 +36,14 @@ ABORT - Rollsback to BEGIN or last COMMIT.
 
 SET - Alters or Creates a Key-Value within Key-Value Space.
 
-    SET \[KEY\] \[VALUE\]
+    SET [KEY] [VALUE]
 GET- Retrieves Value from a specified 
 
-    GET \[KEY\]
+    GET [KEY]
 
 DEL- Removes Key-Value pair from Key-Value Space.
 
-    DEL \[KEY\]
+    DEL [KEY]
 
 Each transaction block begins with a BEGIN; statement.
 
