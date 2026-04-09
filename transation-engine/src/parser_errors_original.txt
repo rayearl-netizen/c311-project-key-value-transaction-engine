@@ -1,0 +1,34 @@
+#Parsing ERRORS~#
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>~#
+
+#Error: Missing SEMICOLON.~#
+#
+BEGIN
+SET semicolon "Need it";
+GET semicolon
+END;
+~#
+
+#Missing Identifier in SET/GET/DEL~#
+#
+BEGIN;
+SET "HI" "Hi again";
+GET;
+END;
+~#
+
+#Missing Value in SET~#
+#
+BEGIN;
+SET Hi Hello;
+GET Hi;
+END;
+~#
+
+#Trailing SEMICOLON. Design Choice.~#
+#
+BEGIN;;
+SET Hi "Double Semicolon";
+GET Hi;
+END;
+~#
