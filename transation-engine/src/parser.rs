@@ -1,5 +1,6 @@
 use crate::lex::Token;
 
+#[derive(Debug)]
 pub enum Command {
     SET(String, String), //Should be SET IDENTIFIER VALUE SEMICOLON
     GET(String), //GET IDENTIFIER SEMICOLON

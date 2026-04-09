@@ -18,12 +18,10 @@ pub fn validator(command_stream: Vec<Command>) -> Result<(), String>{
         active_transaction:false
     };
 
-
-
-    while i <= command_stream.len(){
+    while i < command_stream.len(){
         let mut command = &command_stream[i];
         match &command_stream[i]{
-            Command::SET(_,_) => validate_basics(&mut state)?,
+            Command::SET(key,_) => validate_set(key.to_string() ,&mut state)?,
             Command::GET(_) => validate_identifier_ref(command, &mut state)?,
             Command::DEL(_) => validate_identifier_ref(command,&mut state )?,
             Command::BEGIN => validate_begin(&mut state)?,
@@ -32,6 +30,7 @@ pub fn validator(command_stream: Vec<Command>) -> Result<(), String>{
             Command::ABORT => validate_basics(&mut state)?,
             _ => {}
         }
+        i += 1;
     }
     Ok(())
 }
@@ -40,10 +39,10 @@ fn validate_identifier_ref(command: &Command,  state:&mut ValidatorState) -> Res
     let key = match command {
         Command::GET(identifier) => identifier,
         Command::DEL(identifier) => identifier,
-        _ => return Err("No identifier in this command".to_string()),
+        _ => return Err("Expected Command with Identifier Reference".to_string()),
     };
     if state.active_transaction != true {
-        return Err("SET must be within BEGIN-END block".to_string());
+        return Err("GET/DEL must be within BEGIN-END block".to_string());
     }
     if !state.identifiers.contains(key){
         return  Err("Key not found!".to_string());
@@ -51,10 +50,16 @@ fn validate_identifier_ref(command: &Command,  state:&mut ValidatorState) -> Res
     Ok(())
 }
 
-fn validate_begin(state: &mut ValidatorState) -> Result<(), String>{
-    if !state.saw_begin{
+fn validate_begin(state: &mut ValidatorState) -> Result<(), String> {
+    if state.saw_begin {
         return Err("Already within Transaction Block".to_string());
     }
+    if state.saw_end {
+        return Err("Cannot BEGIN after END".to_string());
+    }
+
+    state.saw_begin = true;
+    state.active_transaction = true;
     Ok(())
 }
 
@@ -62,17 +67,26 @@ fn validate_end(state: &mut ValidatorState) -> Result<(), String>{
     if !state.saw_begin{
         return Err("Not Within a Transaction Block. Cannot End".to_string());
     }
-
+    state.active_transaction = true;
+    state.saw_end = true;
     Ok(())
 }
 
 
-//SET, COMMIT, ABORT
-fn validate_basics(state: &mut ValidatorState) -> Result<(), String>{
-    if !state.active_transaction{
-        return Err("Not Within a Transaction Block. Cannot End".to_string());
+fn validate_set(key:String, state: &mut ValidatorState) -> Result<(), String> {
+    if !state.active_transaction {
+        return Err("SET must be within BEGIN-END block".to_string());
+    }
+
+    state.identifiers.insert(key.clone());
+    Ok(())
+}
+
+
+fn validate_basics(state: &mut ValidatorState) -> Result<(), String> {
+    if !state.active_transaction {
+        return Err("COMMIT/ABORT must be within BEGIN-END block".to_string());
     }
 
     Ok(())
 }
-

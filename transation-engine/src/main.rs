@@ -1,6 +1,7 @@
 mod lex;
 mod parser;
-pub mod validator;
+mod validator;
+pub mod exec;
 
 //In rust the args[] stream is instead accessed via a standard library.
 use std::env;
@@ -20,9 +21,19 @@ fn main() {
     println!("Text within file number one: \n{contents2}");
 
     let tokenized = lex::lexical_analyzer(contents1);
-
+    println!("Lexical Analysis");
     for i in 0..tokenized.len() {
         println!("{:?}", tokenized[i]);
     }
+
+    let parsed = parser::parse_tokens(tokenized).expect("Parsing Error!");
+
+    println!("\nParsing");
+    for i in 0.. parsed.len(){
+        println!("{:?}", parsed[i]);
+    }
+
+    validator::validator(parsed);
+    println!("Validation Complete!");
 }
 
