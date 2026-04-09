@@ -2,21 +2,27 @@
 #>>>>>>>>>>>>>>>>>>>>>~#
 
 #Error: Statement before BEGIN.~#
-#~#
-SET x "Hi"
+#
 BEGIN;
+SET x "Hi";
 GET x;
 END;
-#~#
+~#
 
 #Error: Statement after END.~#
-#
 BEGIN;
 SET x "After End";
 END;
 GET x;
-~#
 
+#Error: Double Begin~#
+#
+BEGIN;
+BEGIN;
+SET x "Beginning after the Beginning";
+GET x;
+END;
+~#
 
 #Error Missing BEGIN~#
 #

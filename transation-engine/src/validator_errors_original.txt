@@ -2,12 +2,12 @@
 #>>>>>>>>>>>>>>>>>>>>>~#
 
 #Error: Statement before BEGIN.~#
-#~#
-SET x "Hi"
+#
+SET x "Hi";
 BEGIN;
 GET x;
 END;
-#~#
+~#
 
 #Error: Statement after END.~#
 #
