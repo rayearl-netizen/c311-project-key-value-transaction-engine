@@ -1,6 +1,6 @@
-mod LexicalAnalyzer;
-
-
+mod lex;
+mod parser;
+pub mod validator;
 
 //In rust the args[] stream is instead accessed via a standard library.
 use std::env;
@@ -19,7 +19,7 @@ fn main() {
     let contents2 = fs::read_to_string(&args[2]).expect("Not able to find file"); //Large String for Processing File 2.
     println!("Text within file number one: \n{contents2}");
 
-    let tokenized = LexicalAnalyzer::lexical_analyzer(contents1);
+    let tokenized = lex::lexical_analyzer(contents1);
 
     for i in 0..tokenized.len() {
         println!("{:?}", tokenized[i]);

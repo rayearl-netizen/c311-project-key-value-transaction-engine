@@ -16,6 +16,7 @@ pub enum Token { //Enum that is the basis of tokenization.
     IDENTIFIER(String),
     VALUE(String),
     SEMICOLON,
+    EOF
 }
 //Function that mutates a vector by pushing the appropriate keyword token compared to the given string.
 fn push_keyword(vector: &mut Vec<Token>, slice: &str) {
@@ -91,7 +92,7 @@ pub fn lexical_analyzer(file: String) -> Vec<Token> {
             error = true;
         }
     }
-
+    token_vector.push(Token::EOF); //Denoting the EOF
     token_vector //returning the created vector of tokens for the parser to observe.
 }
 
