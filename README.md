@@ -26,6 +26,8 @@ Values passed into the Key must be strings delimted by "" Quotes. Quotes within 
 
 Within the quotes any valid standard character is allowed.
 
+Commenting is delimited by # to begin a comment and ~# to end a comment.
+
 BEGIN - Begins transaction block.
 
 END - Ends transaction block.

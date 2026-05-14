@@ -10,10 +10,12 @@ END;
 ~#
 
 #Error: Statement after END.~#
+#
 BEGIN;
 SET x "After End";
 END;
 GET x;
+~#
 
 #Error: Double Begin~#
 #
@@ -47,11 +49,10 @@ END;
 ~#
 
 #Error: GET Statement containing deleted key~#
-#
+
 BEGIN;
 SET x "Deleted"
 GET x;
 DEL x;
 GET x;
 END;
-~#

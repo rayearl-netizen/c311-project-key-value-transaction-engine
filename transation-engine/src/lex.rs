@@ -2,6 +2,7 @@
 Notes on Syntax Choice.
 1. No nested quotes. Example("This is not -> "valid" <- , you see?")
 2. No Numerics. Logically doesn't make sense for our purposes, could implement if expanded on.
+3. Comments are delimited by # to start and ~# to end.
 */
 
 #[derive(Debug)]
@@ -101,10 +102,10 @@ pub fn lexical_analyzer(file: String) -> Result<Vec<Token>, String> {
             else if current_character == ';' { //consume semicolon
                 token_vector.push(Token::SEMICOLON);
                 walker += 1;
-            } else { //for this language if the above didn't catch => error
+            } /*else { //for this language if the above didn't catch => error
                 return Err("INVALID LEXEME!!!!".to_string());
                 error = true;
-            }
+            }*/
         }
     }
     token_vector.push(Token::EOF); //Denoting the EOF

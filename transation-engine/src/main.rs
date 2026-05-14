@@ -17,9 +17,8 @@ fn main() -> Result<(),String>{
     //dbg!(&args);
 
     let mut key_value_space: HashMap<String,String> = HashMap::new();
-
-
-
+    
+    //Each file in the terminal arguments will be executed sequentially.
     for i in 1..args.len() {
         let contents = fs::read_to_string(&args[i]).expect("Not able to find file"); //Large String for Processing File 1.
         println!("\nText within file number {i}: \n{contents}");
@@ -27,6 +26,7 @@ fn main() -> Result<(),String>{
 
         println!("\nBeginning Compilation of Text File {i}");
         println!(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        //When a function returns Result<> a ? is needed to handle the standard behavior and error behavior.
         let tokenized = lex::lexical_analyzer(contents)?;
         println!("\nLexical Analysis");
         println!(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");

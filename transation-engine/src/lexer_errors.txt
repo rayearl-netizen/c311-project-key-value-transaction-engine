@@ -16,12 +16,12 @@ END;
 ~#
 
 #Error: NON-Capitalized Keyword!~#
-#
+
 BEGIN;
 SET capital "All keywords must be Capitalized!";
 Get capital;
 END;
-~#
+
 
 #Error: Non-terminating Quotes~#
 #

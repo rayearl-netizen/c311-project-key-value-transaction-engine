@@ -17,9 +17,10 @@ pub fn validator(command_stream: &Vec<Command>) -> Result<(), String>{
         saw_end: false,
         active_transaction:false
     };
-
+    //iterating through command stream sequentially.
     while i < command_stream.len(){
-        let mut command = &command_stream[i];
+        let command = &command_stream[i];
+        //matching each unique command to its own helper function for validation.
         match &command_stream[i]{
             Command::SET(key,_) => validate_set(key.to_string() ,&mut state)?,
             Command::GET(_) => validate_get(command, &mut state)?,
@@ -27,28 +28,33 @@ pub fn validator(command_stream: &Vec<Command>) -> Result<(), String>{
             Command::BEGIN => validate_begin(&mut state)?,
             Command::END => validate_end(&mut state)?,
             Command::COMMIT => validate_basics(&mut state)?,
-            Command::ABORT => validate_basics(&mut state)?,
-            _ => {}
+            Command::ABORT => validate_basics(&mut state)?
         }
         i += 1;
     }
+    //If all goes well, we silently exit.
     Ok(())
 }
 //GET and DEL commands
 fn validate_get(command: &Command,  state:&mut ValidatorState) -> Result<(), String>{
+    //need match for extracting while accounting for error.
     let key = match command {
         Command::GET(identifier) => identifier,
         _ => return Err("Expected Command with Identifier Reference".to_string()),
     };
-    if state.active_transaction != true {
+    //checking if within BEGIN-END block and checking if relevant identifier exists within current scope.
+    if state.active_transaction == false {
         return Err("GET must be within BEGIN-END block".to_string());
     }
     if !state.identifiers.contains(key){
         return  Err("Key not found!".to_string());
     }
+    //silent exit if all goes well.
     Ok(())
 }
 
+
+//almost identical to get except...
 fn validate_del(command: &Command,  state:&mut ValidatorState) -> Result<(), String>{
     if state.active_transaction != true {
         return Err("DEL must be within BEGIN-END block".to_string());
@@ -62,6 +68,7 @@ fn validate_del(command: &Command,  state:&mut ValidatorState) -> Result<(), Str
     if !state.identifiers.contains(key){
         return  Err("Key not found!".to_string());
     }
+    //we must remove identifier from scope before exiting.
     state.identifiers.remove(key);
 
     Ok(())
@@ -74,7 +81,7 @@ fn validate_begin(state: &mut ValidatorState) -> Result<(), String> {
     if state.saw_end {
         return Err("Cannot BEGIN after END".to_string());
     }
-
+    //Contextually checks for double begin.
     state.saw_begin = true;
     state.active_transaction = true;
     Ok(())
@@ -84,7 +91,8 @@ fn validate_end(state: &mut ValidatorState) -> Result<(), String>{
     if !state.saw_begin{
         return Err("Not Within a Transaction Block. Cannot End".to_string());
     }
-    state.active_transaction = true;
+    //contextually checks for corresponding begin.
+    state.active_transaction = false;
     state.saw_end = true;
     Ok(())
 }
@@ -94,12 +102,12 @@ fn validate_set(key:String, state: &mut ValidatorState) -> Result<(), String> {
     if !state.active_transaction {
         return Err("SET must be within BEGIN-END block".to_string());
     }
-
+    //simply checks if within active block and adds appropriate identifier.
     state.identifiers.insert(key.clone());
     Ok(())
 }
 
-
+//Commit and Abort both don't mutate in a manner that warrants, a rollback and only require active block.
 fn validate_basics(state: &mut ValidatorState) -> Result<(), String> {
     if !state.active_transaction {
         return Err("COMMIT/ABORT must be within BEGIN-END block".to_string());

@@ -1,6 +1,6 @@
 #HI My name is BILLY! ~#
 BEGIN;
-SET x "Hi MOM!";
+SET x1 "Hi MOM!"; 
 #Hello Again ~#
 GET x;
 END;
